@@ -16,7 +16,7 @@ plugins {
   id("com.github.ben-manes.versions") version "0.42.0"
   java
   application
-  id("com.github.johnrengelman.shadow") version "7.1.2"
+  id("com.github.johnrengelman.shadow") version "8.1.0"
   id("org.sonarqube") version "3.4.0.2513"
 }
 
