@@ -51,7 +51,7 @@ dependencies {
 
   testImplementation(platform("org.junit:junit-bom:5.9.2"))
   testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
-  testImplementation("org.mockito:mockito-inline:4.7.0")
+  testImplementation("org.mockito:mockito-inline:5.1.1")
   testImplementation("org.mockito:mockito-junit-jupiter:5.1.1")
 }
 
