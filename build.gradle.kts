@@ -13,7 +13,7 @@ import java.util.Date
 
 plugins {
   checkstyle
-  id("com.github.ben-manes.versions") version "0.42.0"
+  id("com.github.ben-manes.versions") version "0.46.0"
   java
   application
   id("com.github.johnrengelman.shadow") version "8.1.0"
