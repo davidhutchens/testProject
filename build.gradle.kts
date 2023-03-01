@@ -186,7 +186,7 @@ task<Jar>("sourcesJar") {
   group = "build"
   description = "Creates a JAR archive with project sources."
   dependsOn.add("classes")
-  classifier = "src"
+  archiveClassifier.set("src")
 
   from(sourceSets.main.get().allSource)
   archiveVersion.set(ext.get(APP_VERSION) as String)
