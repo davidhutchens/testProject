@@ -37,7 +37,7 @@ dependencies {
   implementation("at.swimmesberger:swingx-core:1.6.8")
   implementation("org.scijava:swing-checkbox-tree:1.0.2")
   implementation("org.slf4j:slf4j-api:2.0.6")
-  implementation("org.slf4j:slf4j-simple:2.0.0")
+  implementation("org.slf4j:slf4j-simple:2.0.6")
   implementation("com.formdev:flatlaf:3.0")
   implementation("commons-cli:commons-cli:1.5.0")
   implementation("org.apache.commons:commons-text:1.10.0")
