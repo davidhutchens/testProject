@@ -33,7 +33,7 @@ dependencies {
   implementation("javax.help:javahelp:2.0.05")
   implementation("com.fifesoft:rsyntaxtextarea:3.3.2")
   implementation("net.sf.nimrod:nimrod-laf:1.2")
-  implementation("org.drjekyll:colorpicker:1.4.4")
+  implementation("org.drjekyll:colorpicker:1.4.5")
   implementation("at.swimmesberger:swingx-core:1.6.8")
   implementation("org.scijava:swing-checkbox-tree:1.0.2")
   implementation("org.slf4j:slf4j-api:2.0.6")
