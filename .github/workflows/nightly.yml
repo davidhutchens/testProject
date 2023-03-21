@@ -116,18 +116,18 @@ jobs:
         with:
           ref: 'develop'
 
-      - name: 'Build Snap package'
-        # https://github.com/snapcore/action-build
-        uses: snapcore/action-build@v1
-        id: snapcraft
-
-      - name: 'Upload *.snap artifact.'
-        uses: actions/upload-artifact@v3
-        if: success()
-        with:
-           path: ${{ steps.snapcraft.outputs.snap }}
-           name: ${{ needs.git_check.outputs.base_name }}_amd64.snap
-
+#      - name: 'Build Snap package'
+#        # https://github.com/snapcore/action-build
+#        uses: snapcore/action-build@v1
+#        id: snapcraft
+#
+#      - name: 'Upload *.snap artifact.'
+#        uses: actions/upload-artifact@v3
+#        if: success()
+#        with:
+#           path: ${{ steps.snapcraft.outputs.snap }}
+#           name: ${{ needs.git_check.outputs.base_name }}_amd64.snap
+#
 #      - name: 'Pushing *.snap to snapcraft.io'
 #        # https://github.com/snapcore/action-publish
 #        uses: snapcore/action-publish@v1
