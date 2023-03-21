@@ -16,8 +16,8 @@ plugins {
   id("com.github.ben-manes.versions") version "0.46.0"
   java
   application
-  id("com.github.johnrengelman.shadow") version "8.1.0"
-  id("org.sonarqube") version "3.4.0.2513"
+  id("com.github.johnrengelman.shadow") version "8.1.1"
+  id("org.sonarqube") version "4.0.0.2929"
 }
 
 repositories {
@@ -33,14 +33,14 @@ dependencies {
   implementation("javax.help:javahelp:2.0.05")
   implementation("com.fifesoft:rsyntaxtextarea:3.3.2")
   implementation("net.sf.nimrod:nimrod-laf:1.2")
-  implementation("org.drjekyll:colorpicker:1.4.3")
+  implementation("org.drjekyll:colorpicker:1.4.5")
   implementation("at.swimmesberger:swingx-core:1.6.8")
   implementation("org.scijava:swing-checkbox-tree:1.0.2")
-  implementation("org.slf4j:slf4j-api:2.0.0")
-  implementation("org.slf4j:slf4j-simple:2.0.0")
-  implementation("com.formdev:flatlaf:2.4")
+  implementation("org.slf4j:slf4j-api:2.0.7")
+  implementation("org.slf4j:slf4j-simple:2.0.7")
+  implementation("com.formdev:flatlaf:3.0")
   implementation("commons-cli:commons-cli:1.5.0")
-  implementation("org.apache.commons:commons-text:1.9")
+  implementation("org.apache.commons:commons-text:1.10.0")
 
   // NOTE: Do not upgrade the jflex version. Later versions do not work.
   compileOnly("de.jflex:jflex:1.4.1")
@@ -50,9 +50,9 @@ dependencies {
   // implementation("org.apache.xmlgraphics:batik-swing:1.14")
 
   testImplementation(platform("org.junit:junit-bom:5.9.2"))
-  testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
-  testImplementation("org.mockito:mockito-inline:4.7.0")
-  testImplementation("org.mockito:mockito-junit-jupiter:5.1.1")
+  testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+  testImplementation("org.mockito:mockito-inline:5.2.0")
+  testImplementation("org.mockito:mockito-junit-jupiter:5.2.0")
 }
 
 /**
@@ -186,7 +186,7 @@ task<Jar>("sourcesJar") {
   group = "build"
   description = "Creates a JAR archive with project sources."
   dependsOn.add("classes")
-  classifier = "src"
+  archiveClassifier.set("src")
 
   from(sourceSets.main.get().allSource)
   archiveVersion.set(ext.get(APP_VERSION) as String)
