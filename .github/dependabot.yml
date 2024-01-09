@@ -7,6 +7,13 @@ updates:
     target-branch: "main"
     ignore:
       - dependency-name: "de.jflex:jflex"
+    groups:
+      slf4j:
+         patterns:
+         - "@slf4j*"
+      junit:
+         patterns:
+         - "@junit*"
 
   - package-ecosystem: "github-actions"
     # directory of "/" for github-actions means .github/workflows
