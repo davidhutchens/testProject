@@ -3,8 +3,8 @@ updates:
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
-      interval: "daily"
-    target-branch: "develop"
+      interval: "weekly"
+    target-branch: "main"
     ignore:
       - dependency-name: "de.jflex:jflex"
 
@@ -12,5 +12,5 @@ updates:
     # directory of "/" for github-actions means .github/workflows
     directory: "/"
     schedule:
-      interval: "daily"
-    target-branch: "develop"
+      interval: "weekly"
+    target-branch: "main"

@@ -3,7 +3,7 @@
 # https://github.com/logisim-evolution/logisim-evolution
 #
 # Cron driven Github Action builder, intended to create nightly builds
-# from Logisim-evolution's "develop" branch. It assumes to be invoked
+# from Logisim-evolution's "main" branch. It assumes to be invoked
 # daily (once per 24 hrs) and skips building if there was no repo activity
 # during last 24 hours.
 #
@@ -12,15 +12,10 @@
 
 name: "Nightly"
 on:
-  # The "pull_request" trigger is here for debugging purposes and
-  # as work-around for having this worker not yet in main branch.
-  # Keep it disabled once it's merged into main branch as we only
-  # want "schedule" to be the trigger.
-  # NOTE: remove `if` condition marked with `HACK` once merged.
-  pull_request:
-  # Nightly must be run against "develop" branch only.
-    branches: [ develop ]
-    types: [ closed ]
+  # To enable "nightly" on closing pull requests uncomment the following:
+  #pull_request:
+  #  branches: [ main ]
+  #  types: [ closed ]
   schedule:
     # every day at midnight
     - cron: "0 0 * * *"
@@ -33,9 +28,6 @@ jobs:
   git_check:
     name: "Any changes since last run?"
     runs-on: ubuntu-latest
-    # HACK: Temporary workaround for `schedule` not working outside main
-    # branch and lack of `type: merged` for `pull_request` trigger.
-    # if: github.event.pull_request.merged == true
 
     # Export build vars so other steps can use it.
     outputs:
@@ -52,7 +44,7 @@ jobs:
     steps:
       # https://github.com/marketplace/actions/checkout
       - name: 'Checkout sources'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Check if latest commit is less than a day.
       - name: "ANY CHANGES SINCE LAST BUILD?"
@@ -77,7 +69,7 @@ jobs:
             echo "*** No code changes since yesterday. Skipping."
           fi
 
-          # I need to export current version, even if is incorrect for develop branch as it
+          # I need to export current version, even if is incorrect for main branch as it
           # is part of produced artifacts. We will strip it prior uploading anyway.
 
           # LSe version string can have additional "unstable" indicator (i.e. "-dev") but
@@ -112,9 +104,9 @@ jobs:
     steps:
       # https://github.com/z0al/dependent-issues
       - name: 'Checkout branch: ${{ env.GITHUB_REF }}'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          ref: 'develop'
+          ref: 'main'
 
 #      - name: 'Build Snap package'
 #        # https://github.com/snapcore/action-build
@@ -122,7 +114,7 @@ jobs:
 #        id: snapcraft
 #
 #      - name: 'Upload *.snap artifact.'
-#        uses: actions/upload-artifact@v3
+#        uses: actions/upload-artifact@v4
 #        if: success()
 #        with:
 #           path: ${{ steps.snapcraft.outputs.snap }}
@@ -144,7 +136,7 @@ jobs:
         # ###########################################################################################
 
       - name: Set up JDK ${{ env.JDK_VERSION }} ${{ env.JDK_DISTRO }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: ${{ env.JDK_VERSION }}
           distribution: ${{ env.JDK_DISTRO }}
@@ -161,7 +153,7 @@ jobs:
 
       # https://github.com/marketplace/actions/upload-a-build-artifact
       - name: 'Upload binary JAR'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: success()
         with:
           path: build/libs/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-all.jar
@@ -178,7 +170,7 @@ jobs:
           ./gradlew createDeb -x checkstyleMain -x checkstyleTest
 
       - name: 'Upload *.deb'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: success()
         with:
           path: build/dist/${{ needs.git_check.outputs.lse_name }}_${{ needs.git_check.outputs.lse_version }}-1_amd64.deb
@@ -196,7 +188,7 @@ jobs:
           ./gradlew createRpm -x checkstyleMain -x checkstyleTest
 
       - name: 'Upload *.rpm'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: success()
         with:
           path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-1.x86_64.rpm
@@ -215,7 +207,7 @@ jobs:
           ./gradlew sourcesJar
 
       - name: 'Upload sources JAR'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: success()
         with:
           path: build/libs/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-src.jar
@@ -234,11 +226,11 @@ jobs:
     steps:
       # https://github.com/marketplace/actions/checkout
       - name: "Checkout sources"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
       - name: Set up JDK ${{ env.JDK_VERSION }} ${{ env.JDK_DISTRO }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: ${{ env.JDK_VERSION }}
           distribution: ${{ env.JDK_DISTRO }}
@@ -252,7 +244,7 @@ jobs:
           ./gradlew createDmg -x checkstyleMain -x checkstyleTest
 
       - name: 'Upload DMG'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: success()
         with:
           path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-x86_64.dmg
@@ -271,9 +263,9 @@ jobs:
     steps:
       # https://github.com/marketplace/actions/checkout
       - name: "Checkout sources"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up JDK ${{ env.JDK_VERSION }} ${{ env.JDK_DISTRO }}
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: ${{ env.JDK_VERSION }}
           distribution: ${{ env.JDK_DISTRO }}
@@ -282,7 +274,7 @@ jobs:
         run: .\gradlew.bat createMsi -x checkstyleMain -x checkstyleTest
 
       - name: 'Upload MSI'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: success()
         with:
           # NOTE: Gradle builder creates MSI file that always uses short version format in file name.
