@@ -16,21 +16,21 @@ on:
       - opened
       - edited
       - reopened
-#  pull_request_target:
-#    types:
-#      - opened
-#      - edited
-#      - reopened
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - reopened
       # Makes sure we always add status check for PRs. Useful only if
       # this action is required to pass before merging. Can be removed
       # otherwise.
-#      - synchronize
+      - synchronize
 
   # Schedule a daily check. Useful if you reference cross-repository
   # issues or pull requests. Can be removed otherwise.
   schedule:
     #        m h dom mon dow
-#    - cron: '0 0 * * *'
+    - cron: '0 0 * * *'
 
 jobs:
   check:
