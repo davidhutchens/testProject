@@ -8,7 +8,7 @@
 #
 # Marcin Orlowski
 #
-name: Dependabot
+name: "Depends on"
 
 on:
   issues:
