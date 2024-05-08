@@ -310,6 +310,8 @@ tasks.register("createDeb") {
   doLast {
     val params = (ext.get(LINUX_PARAMS) as List<Any?>).filterIsInstance<String>() + listOf("--type", "deb")
     runCommand(params, "Error while creating the DEB package.")
+    var distFiles = runCommand(listOf("ls", "-l", "build/dist"), "Error on ls command in createDeb")
+    logger.warn(distFiles)
   }
 }
 
@@ -490,6 +492,8 @@ tasks.register("createDmg") {
         "--type", "dmg",
       )
     runCommand(params, "Error while creating the DMG package")
+    var distFiles = runCommand(listOf("ls", "-l", "build/dist"), "Error on ls command in createDeb")
+    logger.warn(distFiles)
   }
 }
 
