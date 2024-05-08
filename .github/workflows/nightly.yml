@@ -248,7 +248,7 @@ jobs:
         if: success()
         with:
           path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-x86_64.dmg
-          name: ${{ needs.git_check.outputs.base_name }}-x86_64.dmg
+          name: ${{ needs.git_check.outputs.base_name }}-aarch64.dmg
 
   # ###############################################################################################
 
