@@ -216,7 +216,45 @@ jobs:
   # ###############################################################################################
 
   # Building for macOS.
-  build_macos:
+  build_macos_x86_64:
+    name: 'macOS build'
+    runs-on: macos-13
+    # Will run only if git_check determined it is needed.
+    needs: git_check
+    if: needs.git_check.outputs.run_build == 'true'
+
+    steps:
+      # https://github.com/marketplace/actions/checkout
+      - name: "Checkout sources"
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Set up JDK ${{ env.JDK_VERSION }} ${{ env.JDK_DISTRO }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JDK_VERSION }}
+          distribution: ${{ env.JDK_DISTRO }}
+
+      - name: "Build DMG"
+        run: |
+          # Have no mercy.
+          set -euo pipefail
+
+          chmod +x gradlew
+          ./gradlew createDmg -x checkstyleMain -x checkstyleTest
+
+      - name: 'Upload DMG'
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-x86_64.dmg
+          name: ${{ needs.git_check.outputs.base_name }}-x86_64.dmg
+
+
+  # ###############################################################################################
+
+  # Building for macOS aarch64.
+  build_macos_aarch64:
     name: 'macOS build'
     runs-on: macos-latest
     # Will run only if git_check determined it is needed.
@@ -247,7 +285,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-x86_64.dmg
+          path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-aarch64.dmg
           name: ${{ needs.git_check.outputs.base_name }}-aarch64.dmg
 
   # ###############################################################################################
