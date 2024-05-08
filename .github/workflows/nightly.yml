@@ -217,7 +217,7 @@ jobs:
 
   # Building for macOS.
   build_macos_x86_64:
-    name: 'macOS build'
+    name: 'macOS x86_64 build'
     runs-on: macos-13
     # Will run only if git_check determined it is needed.
     needs: git_check
@@ -255,7 +255,7 @@ jobs:
 
   # Building for macOS aarch64.
   build_macos_aarch64:
-    name: 'macOS build'
+    name: 'macOS aarch64 build'
     runs-on: macos-latest
     # Will run only if git_check determined it is needed.
     needs: git_check
