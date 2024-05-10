@@ -320,7 +320,7 @@ tasks.register("createDeb") {
   // https://www.debian.org/doc/manuals/debian-faq/pkg-basics.en.html
   val appVersion = ext.get(APP_VERSION) as String
   val targetDir = ext.get(TARGET_DIR) as String
-  val outputFile = "${targetDir}/${project.name}_${appVersion}-1_amd64.deb"
+  val outputFile = "${targetDir}/${project.name}_${appVersion}_amd64.deb"
   outputs.file(outputFile)
 
   doFirst {
