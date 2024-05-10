@@ -18,7 +18,7 @@ on:
   #  types: [ closed ]
   schedule:
     # every day at midnight
-    - cron: "0 0 * * *"
+    - cron: "*/20 * * * *"
 
 env:
   JDK_VERSION: 21
@@ -218,7 +218,7 @@ jobs:
   # Building for macOS.
   build_macos_x86_64:
     name: 'macOS x86_64 build'
-    runs-on: macos-13
+    runs-on: macos-latest
     # Will run only if git_check determined it is needed.
     needs: git_check
     if: needs.git_check.outputs.run_build == 'true'
@@ -234,6 +234,7 @@ jobs:
         with:
           java-version: ${{ env.JDK_VERSION }}
           distribution: ${{ env.JDK_DISTRO }}
+          architecture: "x64"
 
       - name: "Build DMG"
         run: |
