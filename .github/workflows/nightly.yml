@@ -18,7 +18,7 @@ on:
   #  types: [ closed ]
   schedule:
     # every day at midnight
-    - cron: "*/20 * * * *"
+    - cron: "0 0 * * *"
 
 env:
   JDK_VERSION: 21
