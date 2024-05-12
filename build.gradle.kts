@@ -359,8 +359,8 @@ tasks.register("createRpm") {
   doLast {
     val params = (ext.get(LINUX_PARAMS) as List<Any?>).filterIsInstance<String>() + listOf("--type", "rpm")
     runCommand(params, "Error while creating the RPM package.")
+    verifyFileExists(outputFile);
   }
-  verifyFileExists(outputFile);
 }
 
 /**
@@ -454,7 +454,7 @@ tasks.register("createApp") {
         // app versioning is strictly checked for macOS. No suffix allowed for `app-image` type.
         "--app-version", ext.get(APP_VERSION_SHORT) as String,
         "--type", "app-image",
-        "--mac-app-category", "education"
+        // Can't use until Java 17 // "--mac-app-category", "education"
     )
     runCommand(params, "Error while creating the .app directory.")
 
