@@ -12,7 +12,7 @@ class Main {
       fos.write(myBytes);
       fos.close();
     } catch (IOException ex) {
-
+      System.out.print("Io exception: " + ex);
     }
   }
 }
