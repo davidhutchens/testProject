@@ -16,7 +16,7 @@ plugins {
   id("com.github.ben-manes.versions") version "0.51.0"
   java
   application
-  id("com.github.johnrengelman.shadow") version "8.1.1"
+  id("com.gradleup.shadow") version "8.3.0"
   id("org.sonarqube") version "5.1.0.4882"
 }
 
@@ -429,7 +429,8 @@ tasks.register("createMsi") {
 tasks.register("createApp") {
   val supportDir = ext.get(SUPPORT_DIR) as String
   val buildDir = ext.get(BUILD_DIR) as String
-  val dest = "${buildDir}/macOS-${ext.get(OS_ARCH) as String}"
+  val arch = ext.get(OS_ARCH) as String
+  val dest = "${buildDir}/macOS-${arch}"
 
   group = "build"
   description = "Makes the macOS application."
@@ -454,28 +455,28 @@ tasks.register("createApp") {
         // app versioning is strictly checked for macOS. No suffix allowed for `app-image` type.
         "--app-version", ext.get(APP_VERSION_SHORT) as String,
         "--type", "app-image",
-        // Can't use until Java 17 // "--mac-app-category", "education"
+        "--mac-app-category", "education"
     )
     runCommand(params, "Error while creating the .app directory.")
 
     val appDirName = ext.get(APP_DIR_NAME) as String
-    val pListFilename = "${appDirName}/Contents/Info.plist"
-    val tempPList = "${dest}/Info.plist"
-    runCommand(listOf(
-        "awk",
-        "/Unknown/{sub(/Unknown/,\"public.app-category.education\")};"
-            + "/utilities/{sub(/public.app-category.utilities/,\"public.app-category.education\")};"
-            + "{print >\"${tempPList}\"};"
-            + "/NSHighResolutionCapable/{"
-            + "print \"  <string>true</string>\" >\"${tempPList}\";"
-            + "print \"  <key>NSSupportsAutomaticGraphicsSwitching</key>\" >\"${tempPList}\""
-            + "}",
-        pListFilename,
-    ), "Error while patching Info.plist file.")
+    if ("x86_64".equals(arch)) {
+      val pListFilename = "${appDirName}/Contents/Info.plist"
+      val tempPList = "${dest}/Info.plist"
+      runCommand(listOf(
+          "awk",
+          "{print >\"${tempPList}\"};"
+              + "/NSHighResolutionCapable/{"
+              + "print \"  <string>true</string>\" >\"${tempPList}\";"
+              + "print \"  <key>NSSupportsAutomaticGraphicsSwitching</key>\" >\"${tempPList}\""
+              + "}",
+          pListFilename,
+      ), "Error while patching Info.plist file.")
 
-    runCommand(listOf(
-        "mv", tempPList, pListFilename
-    ), "Error while moving Info.plist into the .app directory.")
+      runCommand(listOf(
+          "mv", tempPList, pListFilename
+      ), "Error while moving Info.plist into the .app directory.")
+    }
 
     runCommand(listOf(
         "codesign", "--force", "--sign", "-", appDirName
@@ -674,7 +675,7 @@ tasks.register("genVhdlSyntax") {
 tasks.register("genFiles") {
   group = "build"
   description = "Generates all generated files."
-//  dependsOn("genBuildInfo", "genVhdlSyntax")
+  // dependsOn("genBuildInfo", "genVhdlSyntax")
 }
 
 /**
