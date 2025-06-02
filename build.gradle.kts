@@ -40,6 +40,7 @@ dependencies {
   implementation("org.slf4j:slf4j-simple:2.0.17")
   implementation("com.formdev:flatlaf:3.6")
   implementation("commons-cli:commons-cli:1.9.0")
+  implementation("com.vladsch.flexmark:flexmark-all:0.64.8")
   implementation("org.apache.commons:commons-text:1.13.1")
 
   // NOTE: Be aware of reported issues with Eclipse and Batik
@@ -747,7 +748,7 @@ tasks.register("genBuildInfo") {
 tasks.register("genFiles") {
   group = "build"
   description = "Generates all generated files."
-  //dependsOn("genBuildInfo")
+  // dependsOn("genBuildInfo")
 }
 
 /**
@@ -834,7 +835,7 @@ tasks {
   // Checkstyles related tasks: "checkstylMain" and "checkstyleTest"
   checkstyle {
     // Checkstyle version to use
-    toolVersion = "8.45"
+    toolVersion = "10.25.0"
 
     // let's use google_checks.xml config provided with Checkstyle.
     // https://stackoverflow.com/a/67513272/1235698
