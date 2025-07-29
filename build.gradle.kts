@@ -108,7 +108,7 @@ extra.apply {
   logger.info("appVersionShort: ${appVersionShort}")
 
   // Architecture used for build
-  val osArch = System.getProperty("os.arch") ?: throw GradleException("os.arch is not set")
+  val osArch = providers.systemProperty("os.arch").get()
   set(OS_ARCH, osArch)
 
   // Build Directory
