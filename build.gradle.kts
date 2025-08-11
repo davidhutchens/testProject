@@ -20,7 +20,7 @@ plugins {
   id("com.github.ben-manes.versions") version "0.52.0"
   java
   application
-  id("com.gradleup.shadow") version "9.0.0-rc1"
+  id("com.gradleup.shadow") version "9.0.0"
   id("org.sonarqube") version "6.2.0.5505"
 }
 
@@ -43,9 +43,9 @@ dependencies {
   implementation("org.slf4j:slf4j-api:2.0.17")
   implementation("org.slf4j:slf4j-simple:2.0.17")
   implementation("com.formdev:flatlaf:3.6.1")
-  implementation("commons-cli:commons-cli:1.9.0")
+  implementation("commons-cli:commons-cli:1.10.0")
   implementation("com.vladsch.flexmark:flexmark-all:0.64.8")
-  implementation("org.apache.commons:commons-text:1.13.1")
+  implementation("org.apache.commons:commons-text:1.14.0")
 
   // NOTE: Be aware of reported issues with Eclipse and Batik
   // See: https://github.com/logisim-evolution/logisim-evolution/issues/709
@@ -150,7 +150,7 @@ extra.apply {
   logger.debug("shadowJarFilename: \"${shadowJarFilename}\"")
 
   // JDK/jpackage vars
-  val javaHome = System.getProperty("java.home") ?: throw GradleException("java.home is not set")
+  val javaHome = providers.systemProperty("java.home").get()
   val jpackage = "${javaHome}/bin/jpackage"
   set(JPACKAGE, jpackage)
   val jdeps = "${javaHome}/bin/jdeps"
@@ -278,6 +278,7 @@ object Func {
     try {
       Files.copy(Paths.get(from), Paths.get(to), StandardCopyOption.REPLACE_EXISTING)
     } catch (ex: Exception) {
+      logger.error(ex.message)
       throw GradleException("Failed to copy file from ${from} to ${to}")
     }
   }
@@ -584,6 +585,7 @@ tasks.register("createApp") {
   group = "build"
   description = "Makes the macOS application."
   dependsOn("createPackageInput", "createNeededJavaModules")
+
   inputs.dir(ext.get(PACKAGE_INPUT_DIR) as String)
   inputs.dir("${supportDir}/macos")
   inputs.file(jdepsFile)
@@ -679,8 +681,7 @@ tasks.register("createDmg") {
 /**
  * Task: genBuildInfo
  *
- * Wrapper task for genBuildInfo() method generating BuildInfo class.
- * No need to trigger it manually.
+ * Generates Java class file with project information like current version, branch name, last commit hash etc.
  */
 tasks.register("genBuildInfo") {
   // Target location for generated files.
@@ -714,6 +715,7 @@ tasks.register("genBuildInfo") {
       branchName = Func.runCommand(listOf("git", "-C", projectDir, "rev-parse", "--abbrev-ref", "HEAD"), errMsg)
       errMsg = "Failed getting last commit hash."
       branchLastCommitHash = Func.runCommand(listOf("git", "-C", projectDir, "rev-parse", "--short=8", "HEAD"), errMsg)
+      buildId = "${branchName}/${branchLastCommitHash}"
     }
 
     val currentMillis = Date().time
@@ -772,7 +774,7 @@ tasks.register("genBuildInfo") {
 tasks.register("genFiles") {
   group = "build"
   description = "Generates all generated files."
-  //dependsOn("genBuildInfo")
+  // dependsOn("genBuildInfo")
 }
 
 /**
@@ -859,7 +861,7 @@ tasks {
   // Checkstyles related tasks: "checkstylMain" and "checkstyleTest"
   checkstyle {
     // Checkstyle version to use
-    toolVersion = "10.25.0"
+    toolVersion = "11.0.0"
 
     // let's use google_checks.xml config provided with Checkstyle.
     // https://stackoverflow.com/a/67513272/1235698
