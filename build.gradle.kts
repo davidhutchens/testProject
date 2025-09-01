@@ -21,7 +21,7 @@ plugins {
   java
   application
   id("com.gradleup.shadow") version "9.0.2"
-  id("org.sonarqube") version "6.2.0.5505"
+  id("org.sonarqube") version "6.3.1.5724"
 }
 
 repositories {
