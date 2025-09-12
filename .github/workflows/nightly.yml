@@ -216,9 +216,9 @@ jobs:
 
   # ###############################################################################################
 
-  # Building for Linux on arm.
+  # Building for Linux Arm.
   build_linux_arm:
-    name: 'Linux build on arm'
+    name: 'Linux Arm build'
     runs-on: ubuntu-22.04-arm
     # Will run only if git_check determined it is needed.
     needs: git_check
@@ -238,7 +238,7 @@ jobs:
 
       # ###########################################################################################
 
-      - name: 'Build DEB on arm'
+      - name: 'Build Arm DEB'
         run: |
           # Have no mercy.
           set -euo pipefail
@@ -255,7 +255,7 @@ jobs:
 
         # ###########################################################################################
 
-      - name: 'Build RPM on arm'
+      - name: 'Build Arm RPM'
         run: |
           # Have no mercy.
           set -euo pipefail
@@ -374,9 +374,9 @@ jobs:
 
   # ###############################################################################################
 
-  # Building for Windows.
+  # Building for Windows Arm.
   build_windows_arm:
-    name: 'Windows build on arm'
+    name: 'Windows Arm build'
     runs-on: windows-11-arm
     # Will run only if git_check determined it is needed.
     needs: git_check
@@ -392,10 +392,10 @@ jobs:
           java-version: ${{ env.JDK_VERSION }}
           distribution: ${{ env.JDK_DISTRO }}
 
-      - name: "Build MSI on arm"
+      - name: "Build Arm MSI"
         run: .\gradlew.bat createMsi -x checkstyleMain -x checkstyleTest
 
-      - name: "Upload MSI on arm"
+      - name: "Upload Arm MSI"
         uses: actions/upload-artifact@v4
         if: success()
         with:
