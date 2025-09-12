@@ -19,7 +19,7 @@ on:
   schedule:
     # -cron: minute[0-59] hour[0-23] dayOfMonth[1-31] month[1-12] dayOfWeek[0-7]
     # every day at midnight
-    - cron: "0 0 * * 0"
+    - cron: "0 0 * * *"
 
 env:
   JDK_VERSION: 21
@@ -271,103 +271,134 @@ jobs:
           path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-1.aarch64.rpm
           name: ${{ needs.git_check.outputs.base_name }}.aarch64.rpm
 
-#  # ###############################################################################################
-#
-#  # Building for macOS.
-#  build_macos:
-#    name: 'macOS build'
-#    runs-on: macos-latest
-#    # Will run only if git_check determined it is needed.
-#    needs: git_check
-#    if: needs.git_check.outputs.run_build == 'true'
-#
-#    steps:
-#      # https://github.com/marketplace/actions/checkout
-#      - name: "Checkout sources"
-#        uses: actions/checkout@v5
-#        with:
-#          ref: ${{ github.ref_name }}
-#
-#      - name: Set up aarch64 JDK ${{ env.JDK_VERSION }} ${{ env.JDK_DISTRO }}
-#        uses: actions/setup-java@v5
-#        with:
-#          java-version: ${{ env.JDK_VERSION }}
-#          distribution: ${{ env.JDK_DISTRO }}
-#
-#      - name: "Build aarch64 DMG"
-#        run: |
-#          # Have no mercy.
-#          set -euo pipefail
-#
-#          chmod +x gradlew
-#          ./gradlew createDmg -x checkstyleMain -x checkstyleTest
-#
-#      - name: 'Upload aarch64 DMG'
-#        uses: actions/upload-artifact@v4
-#        if: success()
-#        with:
-#          path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-aarch64.dmg
-#          name: ${{ needs.git_check.outputs.base_name }}-aarch64.dmg
-#
-#      - name: Set up x86_64 JDK ${{ env.JDK_VERSION }} ${{ env.JDK_DISTRO }}
-#        uses: actions/setup-java@v5
-#        with:
-#          java-version: ${{ env.JDK_VERSION }}
-#          distribution: ${{ env.JDK_DISTRO }}
-#          architecture: "x64"
-#
-#      - name: "Build x86_64 DMG"
-#        run: |
-#          # Have no mercy.
-#          set -euo pipefail
-#
-#          chmod +x gradlew
-#          ./gradlew createDmg -x checkstyleMain -x checkstyleTest
-#
-#      - name: 'Upload x86_64 DMG'
-#        uses: actions/upload-artifact@v4
-#        if: success()
-#        with:
-#          path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-x86_64.dmg
-#          name: ${{ needs.git_check.outputs.base_name }}-x86_64.dmg
-#
-#  # ###############################################################################################
-#
-#  # Building for Windows.
-#  build_windows:
-#    name: 'Windows build'
-#    runs-on: windows-latest
-#    # Will run only if git_check determined it is needed.
-#    needs: git_check
-#    if: needs.git_check.outputs.run_build == 'true'
-#
-#    steps:
-#      # https://github.com/marketplace/actions/checkout
-#      - name: "Checkout sources"
-#        uses: actions/checkout@v5
-#      - name: Set up JDK ${{ env.JDK_VERSION }} ${{ env.JDK_DISTRO }}
-#        uses: actions/setup-java@v5
-#        with:
-#          java-version: ${{ env.JDK_VERSION }}
-#          distribution: ${{ env.JDK_DISTRO }}
-#
-#      - name: "Build MSI"
-#        run: .\gradlew.bat createMsi -x checkstyleMain -x checkstyleTest
-#
-#      - name: "Upload MSI"
-#        uses: actions/upload-artifact@v4
-#        if: success()
-#        with:
-#          # NOTE: Gradle builder creates MSI file that always uses short version format in file name.
-#          path: build\dist\${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version_short }}-amd64.msi
-#          name: ${{ needs.git_check.outputs.base_name }}-amd64.msi
-#
-#      - name: "Build self-contained archive for Windows"
-#        run: .\gradlew.bat createWindowsPortableZip -x checkstyleMain -x checkstyleTest
-#
-#      - name: "Upload self-contained archive for Windows"
-#        uses: actions/upload-artifact@v4
-#        if: success()
-#        with:
-#          path: build\dist\${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-windows-amd64.zip
-#          name: ${{ needs.git_check.outputs.base_name }}-windows-amd64.zip
+  # ###############################################################################################
+
+  # Building for macOS.
+  build_macos:
+    name: 'macOS build'
+    runs-on: macos-latest
+    # Will run only if git_check determined it is needed.
+    needs: git_check
+    if: needs.git_check.outputs.run_build == 'true'
+
+    steps:
+      # https://github.com/marketplace/actions/checkout
+      - name: "Checkout sources"
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Set up aarch64 JDK ${{ env.JDK_VERSION }} ${{ env.JDK_DISTRO }}
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JDK_VERSION }}
+          distribution: ${{ env.JDK_DISTRO }}
+
+      - name: "Build aarch64 DMG"
+        run: |
+          # Have no mercy.
+          set -euo pipefail
+
+          chmod +x gradlew
+          ./gradlew createDmg -x checkstyleMain -x checkstyleTest
+
+      - name: 'Upload aarch64 DMG'
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-aarch64.dmg
+          name: ${{ needs.git_check.outputs.base_name }}-aarch64.dmg
+
+      - name: Set up x86_64 JDK ${{ env.JDK_VERSION }} ${{ env.JDK_DISTRO }}
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JDK_VERSION }}
+          distribution: ${{ env.JDK_DISTRO }}
+          architecture: "x64"
+
+      - name: "Build x86_64 DMG"
+        run: |
+          # Have no mercy.
+          set -euo pipefail
+
+          chmod +x gradlew
+          ./gradlew createDmg -x checkstyleMain -x checkstyleTest
+
+      - name: 'Upload x86_64 DMG'
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-x86_64.dmg
+          name: ${{ needs.git_check.outputs.base_name }}-x86_64.dmg
+
+  # ###############################################################################################
+
+  # Building for Windows.
+  build_windows:
+    name: 'Windows build'
+    runs-on: windows-latest
+    # Will run only if git_check determined it is needed.
+    needs: git_check
+    if: needs.git_check.outputs.run_build == 'true'
+
+    steps:
+      # https://github.com/marketplace/actions/checkout
+      - name: "Checkout sources"
+        uses: actions/checkout@v5
+      - name: Set up JDK ${{ env.JDK_VERSION }} ${{ env.JDK_DISTRO }}
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JDK_VERSION }}
+          distribution: ${{ env.JDK_DISTRO }}
+
+      - name: "Build MSI"
+        run: .\gradlew.bat createMsi -x checkstyleMain -x checkstyleTest
+
+      - name: "Upload MSI"
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          # NOTE: Gradle builder creates MSI file that always uses short version format in file name.
+          path: build\dist\${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version_short }}-amd64.msi
+          name: ${{ needs.git_check.outputs.base_name }}-amd64.msi
+
+      - name: "Build self-contained archive for Windows"
+        run: .\gradlew.bat createWindowsPortableZip -x checkstyleMain -x checkstyleTest
+
+      - name: "Upload self-contained archive for Windows"
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          path: build\dist\${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-windows-amd64.zip
+          name: ${{ needs.git_check.outputs.base_name }}-windows-amd64.zip
+
+  # ###############################################################################################
+
+  # Building for Windows.
+  build_windows_arm:
+    name: 'Windows build on arm'
+    runs-on: windows-11-arm
+    # Will run only if git_check determined it is needed.
+    needs: git_check
+    if: needs.git_check.outputs.run_build == 'true'
+
+    steps:
+      # https://github.com/marketplace/actions/checkout
+      - name: "Checkout sources"
+        uses: actions/checkout@v5
+      - name: Set up JDK ${{ env.JDK_VERSION }} ${{ env.JDK_DISTRO }}
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JDK_VERSION }}
+          distribution: ${{ env.JDK_DISTRO }}
+
+      - name: "Build MSI on arm"
+        run: .\gradlew.bat createMsi -x checkstyleMain -x checkstyleTest
+
+      - name: "Upload MSI on arm"
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          # NOTE: Gradle builder creates AArch64 file that always uses short version format in file name.
+          path: build\dist\${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version_short }}-aarch64.msi
+          name: ${{ needs.git_check.outputs.base_name }}-aarch64.msi
