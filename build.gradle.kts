@@ -385,7 +385,13 @@ tasks.register("createDeb") {
   // https://www.debian.org/doc/manuals/debian-faq/pkg-basics.en.html
   val appVersion = ext.get(APP_VERSION) as String
   val targetDir = ext.get(TARGET_DIR) as String
-  val outputFile = "${targetDir}/${project.name}_${appVersion}_amd64.deb"
+  val osArch = ext.get(OS_ARCH) as String
+  val debArch = when (osArch) {
+    "x86_64", "amd64" -> "amd64"
+    "aarch64", "arm64" -> "arm64"
+    else -> osArch
+  }
+  val outputFile = "${targetDir}/${project.name}_${appVersion}_${debArch}.deb"
   val linuxParams = (ext.get(LINUX_PARAMS) as List<Any?>).filterIsInstance<String>()
   val jdepsFile = ext.get(JDEPS_FILE) as String
 
@@ -417,7 +423,13 @@ tasks.register("createRpm") {
   description = "Makes RPM Linux installation package."
   dependsOn("createPackageInput", "createNeededJavaModules")
 
-  var outputFile = "${ext.get(TARGET_FILE_PATH_BASE) as String}-1.x86_64.rpm"
+  val osArch = ext.get(OS_ARCH) as String
+  val rpmArch = when (osArch) {
+    "x86_64", "amd64" -> "x86_64"
+    "aarch64", "arm64" -> "aarch64"
+    else -> osArch
+  }
+  var outputFile = "${ext.get(TARGET_FILE_PATH_BASE) as String}-1.${rpmArch}.rpm"
   val linuxParams = (ext.get(LINUX_PARAMS) as List<Any?>).filterIsInstance<String>()
   val jdepsFile = ext.get(JDEPS_FILE) as String
 
