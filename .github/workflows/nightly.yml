@@ -19,7 +19,7 @@ on:
   schedule:
     # -cron: minute[0-59] hour[0-23] dayOfMonth[1-31] month[1-12] dayOfWeek[0-7]
     # every day at midnight
-    - cron: "0 * * * *"
+    - cron: "0 0 * * 0"
 
 env:
   JDK_VERSION: 21
@@ -246,7 +246,7 @@ jobs:
           chmod +x gradlew
           ./gradlew createDeb -x checkstyleMain -x checkstyleTest
 
-      - name: 'Upload *amd64.deb'
+      - name: 'Upload *arm64.deb'
         uses: actions/upload-artifact@v4
         if: success()
         with:
