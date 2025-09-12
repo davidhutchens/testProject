@@ -217,7 +217,7 @@ jobs:
   # ###############################################################################################
 
   # Building for Linux on arm.
-  build_linux:
+  build_linux_arm:
     name: 'Linux build on arm'
     runs-on: ubuntu-22.04-arm
     # Will run only if git_check determined it is needed.
