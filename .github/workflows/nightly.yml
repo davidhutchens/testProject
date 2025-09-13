@@ -374,31 +374,32 @@ jobs:
 
   # ###############################################################################################
 
-  # Building for Windows Arm.
-  build_windows_arm:
-    name: 'Windows Arm build'
-    runs-on: windows-11-arm
-    # Will run only if git_check determined it is needed.
-    needs: git_check
-    if: needs.git_check.outputs.run_build == 'true'
-
-    steps:
-      # https://github.com/marketplace/actions/checkout
-      - name: "Checkout sources"
-        uses: actions/checkout@v5
-      - name: Set up JDK ${{ env.JDK_VERSION }} ${{ env.JDK_DISTRO }}
-        uses: actions/setup-java@v5
-        with:
-          java-version: ${{ env.JDK_VERSION }}
-          distribution: ${{ env.JDK_DISTRO }}
-
-      - name: "Build Arm MSI"
-        run: .\gradlew.bat createMsi -x checkstyleMain -x checkstyleTest
-
-      - name: "Upload Arm MSI"
-        uses: actions/upload-artifact@v4
-        if: success()
-        with:
-          # NOTE: Gradle builder creates AArch64 file that always uses short version format in file name.
-          path: build\dist\${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version_short }}-aarch64.msi
-          name: ${{ needs.git_check.outputs.base_name }}-aarch64.msi
+#  This is currently disabled because JPackage uses the WiX Toolset which is not installed.
+#  # Building for Windows Arm.
+#  build_windows_arm:
+#    name: 'Windows Arm build'
+#    runs-on: windows-11-arm
+#    # Will run only if git_check determined it is needed.
+#    needs: git_check
+#    if: needs.git_check.outputs.run_build == 'true'
+#
+#    steps:
+#      # https://github.com/marketplace/actions/checkout
+#      - name: "Checkout sources"
+#        uses: actions/checkout@v5
+#      - name: Set up JDK ${{ env.JDK_VERSION }} ${{ env.JDK_DISTRO }}
+#        uses: actions/setup-java@v5
+#        with:
+#          java-version: ${{ env.JDK_VERSION }}
+#          distribution: ${{ env.JDK_DISTRO }}
+#
+#      - name: "Build Arm MSI"
+#        run: .\gradlew.bat createMsi -x checkstyleMain -x checkstyleTest
+#
+#      - name: "Upload Arm MSI"
+#        uses: actions/upload-artifact@v4
+#        if: success()
+#        with:
+#          # NOTE: Gradle builder creates AArch64 file that always uses short version format in file name.
+#          path: build\dist\${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version_short }}-aarch64.msi
+#          name: ${{ needs.git_check.outputs.base_name }}-aarch64.msi
