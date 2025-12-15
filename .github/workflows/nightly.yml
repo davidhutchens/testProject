@@ -115,7 +115,7 @@ jobs:
 #        id: snapcraft
 #
 #      - name: 'Upload *.snap artifact.'
-#        uses: actions/upload-artifact@v5
+#        uses: actions/upload-artifact@v6
 #        if: success()
 #        with:
 #           path: ${{ steps.snapcraft.outputs.snap }}
@@ -154,7 +154,7 @@ jobs:
 
       # https://github.com/marketplace/actions/upload-a-build-artifact
       - name: 'Upload binary JAR'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: success()
         with:
           path: build/libs/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-all.jar
@@ -171,7 +171,7 @@ jobs:
           ./gradlew createDeb -x checkstyleMain -x checkstyleTest
 
       - name: 'Upload *.deb'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: success()
         with:
           path: build/dist/${{ needs.git_check.outputs.lse_name }}_${{ needs.git_check.outputs.lse_version }}_amd64.deb
@@ -189,7 +189,7 @@ jobs:
           ./gradlew createRpm -x checkstyleMain -x checkstyleTest
 
       - name: 'Upload *.rpm'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: success()
         with:
           path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-1.x86_64.rpm
@@ -208,7 +208,7 @@ jobs:
           ./gradlew sourcesJar
 
       - name: 'Upload sources JAR'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: success()
         with:
           path: build/libs/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-src.jar
@@ -247,7 +247,7 @@ jobs:
           ./gradlew createDeb -x checkstyleMain -x checkstyleTest
 
       - name: 'Upload *arm64.deb'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: success()
         with:
           path: build/dist/${{ needs.git_check.outputs.lse_name }}_${{ needs.git_check.outputs.lse_version }}_arm64.deb
@@ -265,7 +265,7 @@ jobs:
           ./gradlew createRpm -x checkstyleMain -x checkstyleTest
 
       - name: 'Upload *aarch64.rpm'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: success()
         with:
           path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-1.aarch64.rpm
@@ -303,7 +303,7 @@ jobs:
           ./gradlew createDmg -x checkstyleMain -x checkstyleTest
 
       - name: 'Upload aarch64 DMG'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: success()
         with:
           path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-aarch64.dmg
@@ -325,7 +325,7 @@ jobs:
           ./gradlew createDmg -x checkstyleMain -x checkstyleTest
 
       - name: 'Upload x86_64 DMG'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: success()
         with:
           path: build/dist/${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-x86_64.dmg
@@ -355,7 +355,7 @@ jobs:
         run: .\gradlew.bat createMsi -x checkstyleMain -x checkstyleTest
 
       - name: "Upload MSI"
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: success()
         with:
           # NOTE: Gradle builder creates MSI file that always uses short version format in file name.
@@ -366,7 +366,7 @@ jobs:
         run: .\gradlew.bat createWindowsPortableZip -x checkstyleMain -x checkstyleTest
 
       - name: "Upload self-contained archive for Windows"
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: success()
         with:
           path: build\dist\${{ needs.git_check.outputs.lse_name }}-${{ needs.git_check.outputs.lse_version }}-windows-amd64.zip
@@ -397,7 +397,7 @@ jobs:
 #        run: .\gradlew.bat createMsi -x checkstyleMain -x checkstyleTest
 #
 #      - name: "Upload Arm MSI"
-#        uses: actions/upload-artifact@v5
+#        uses: actions/upload-artifact@v6
 #        if: success()
 #        with:
 #          # NOTE: Gradle builder creates AArch64 file that always uses short version format in file name.
