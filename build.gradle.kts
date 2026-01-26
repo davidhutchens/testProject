@@ -213,7 +213,7 @@ tasks.register<Jar>("sourcesJar") {
   archiveVersion.set(ext.get(APP_VERSION) as String)
 }
 
-object Func {
+object func {
   val logger: Logger = Logging.getLogger("BuildUtils")
 
   /**
@@ -341,9 +341,9 @@ tasks.register("createNeededJavaModules") {
   outputs.file(outFileName)
 
   doLast {
-    val neededJavaModules = Func.runCommand(cmd, "Error while finding Java dependencies with jdeps.").trim()
+    val neededJavaModules = func.runCommand(cmd, "Error while finding Java dependencies with jdeps.").trim()
     File(outFileName).writeText(neededJavaModules)
-    Func.verifyFileExists(outFileName)
+    func.verifyFileExists(outFileName)
   }
 }
 
@@ -366,8 +366,8 @@ tasks.register("createPackageInput") {
   outputs.dir(packageInputDir)
 
   doLast {
-    Func.deleteDirectoryContents(packageInputDir)
-    Func.copyFile("${libsDir}/${shadowJarFilename}", "${packageInputDir}/${shadowJarFilename}")
+    func.deleteDirectoryContents(packageInputDir)
+    func.copyFile("${libsDir}/${shadowJarFilename}", "${packageInputDir}/${shadowJarFilename}")
   }
 }
 
@@ -409,9 +409,9 @@ tasks.register("createDeb") {
   }
 
   doLast {
-    val params = linuxParams + Func.getNeededModules(jdepsFile) + listOf("--type", "deb")
-    Func.runCommand(params, "Error while creating the DEB package.")
-    Func.verifyFileExists(outputFile);
+    val params = linuxParams + func.getNeededModules(jdepsFile) + listOf("--type", "deb")
+    func.runCommand(params, "Error while creating the DEB package.")
+    func.verifyFileExists(outputFile);
   }
 }
 
@@ -448,9 +448,9 @@ tasks.register("createRpm") {
   }
 
   doLast {
-    val params = linuxParams + Func.getNeededModules(jdepsFile) + listOf("--type", "rpm")
-    Func.runCommand(params, "Error while creating the RPM package.")
-    Func.verifyFileExists(outputFile);
+    val params = linuxParams + func.getNeededModules(jdepsFile) + listOf("--type", "rpm")
+    func.runCommand(params, "Error while creating the RPM package.")
+    func.verifyFileExists(outputFile);
   }
 }
 
@@ -485,7 +485,7 @@ tasks.register("createMsi") {
   }
 
   doLast {
-    val params = sharedParams + Func.getNeededModules(jdepsFile) + listOf(
+    val params = sharedParams + func.getNeededModules(jdepsFile) + listOf(
         "--name", projectName,
         "--dest", targetDir,
         "--file-associations", "${supportDir}/windows/file.jpackage",
@@ -500,12 +500,12 @@ tasks.register("createMsi") {
         // NOTE: any change to version **format** may require editing of .github/workflows/nightly.yml too!
         "--app-version", version,
     )
-    Func.runCommand(params, "Error while creating the MSI package.")
+    func.runCommand(params, "Error while creating the MSI package.")
     val fromFile = "${targetDir}/${projectName}-${version}.msi"
     val toFile = "${targetDir}/${projectName}-${version}-${osArch}.msi"
-    Func.copyFile(fromFile, toFile)
-    File("${targetDir}/${fromFile}").delete()
-    Func.verifyFileExists(outputFile);
+    func.copyFile(fromFile, toFile)
+    File(fromFile).delete()
+    func.verifyFileExists(outputFile);
   }
 }
 
@@ -542,8 +542,8 @@ tasks.register("createExe") {
   }
 
   doLast {
-    Func.deleteDirectoryContents(dest)
-    val params = sharedParams + Func.getNeededModules(jdepsFile) + listOf(
+    func.deleteDirectoryContents(dest)
+    val params = sharedParams + func.getNeededModules(jdepsFile) + listOf(
         "--name", projectName,
         "--dest", dest,
         "--icon", "${supportDir}/windows/Logisim-evolution.ico",
@@ -553,8 +553,8 @@ tasks.register("createExe") {
         // NOTE: any change to version **format** may require editing of .github/workflows/nightly.yml too!
         "--app-version", version,
     )
-    Func.runCommand(params, "Error while creating the Windows executable.")
-    Func.verifyFileExists("${dest}/${projectName}/${projectName}.exe")
+    func.runCommand(params, "Error while creating the Windows executable.")
+    func.verifyFileExists("${dest}/${projectName}/${projectName}.exe")
   }
 }
 
@@ -613,8 +613,8 @@ tasks.register("createApp") {
   }
 
   doLast {
-    Func.deleteDirectoryContents(dest)
-    val params = sharedParams + Func.getNeededModules(jdepsFile) + listOf(
+    func.deleteDirectoryContents(dest)
+    val params = sharedParams + func.getNeededModules(jdepsFile) + listOf(
         "--dest", dest,
         "--name", projectName,
         "--file-associations", "${supportDir}/macos/file.jpackage",
@@ -624,12 +624,12 @@ tasks.register("createApp") {
         "--type", "app-image",
         "--mac-app-category", "education"
     )
-    Func.runCommand(params, "Error while creating the .app directory.")
+    func.runCommand(params, "Error while creating the .app directory.")
 
     if ("x86_64".equals(arch)) {
       val pListFilename = "${appDirName}/Contents/Info.plist"
       val tempPList = "${dest}/Info.plist"
-      Func.runCommand(listOf(
+      func.runCommand(listOf(
           "awk",
           "{print >\"${tempPList}\"};"
               + "/NSHighResolutionCapable/{"
@@ -639,11 +639,11 @@ tasks.register("createApp") {
           pListFilename,
       ), "Error while patching Info.plist file.")
 
-      Func.runCommand(listOf(
+      func.runCommand(listOf(
           "mv", tempPList, pListFilename
       ), "Error while moving Info.plist into the .app directory.")
 
-      Func.runCommand(listOf(
+      func.runCommand(listOf(
           "codesign", "--force", "--sign", "-", appDirName
       ), "Error while executing: codesign")
     }
@@ -664,8 +664,8 @@ tasks.register("createDmg") {
   val osArch = ext.get(OS_ARCH) as String
   val projectName = project.name
   val jPackage = ext.get(JPACKAGE) as String
-  val appVersion = "${ext.get(APP_VERSION) as String}-${osArch}"
-  val destination = ext.get(TARGET_DIR) as String
+  val appVersion = ext.get(APP_VERSION_SHORT) as String
+  val targetDir = ext.get(TARGET_DIR) as String
   val outputFile = "${ext.get(TARGET_FILE_PATH_BASE) as String}-${osArch}.dmg"
 
   inputs.dir(appDirName)
@@ -682,14 +682,17 @@ tasks.register("createDmg") {
         jPackage,
         "--app-image", appDirName,
         "--name", projectName,
-        // We can pass full version here, even if contains suffix part too.
-        // We also append the architecture to add it to the package name.
+        // app versioning is strictly checked for macOS. No suffix allowed for `app-image` type.
         "--app-version", appVersion,
-        "--dest", destination,
+        "--dest", targetDir,
         "--type", "dmg",
       )
-    Func.runCommand(params, "Error while creating the DMG package")
-    Func.verifyFileExists(outputFile);
+    func.runCommand(params, "Error while creating the DMG package")
+    val fromFile = "${targetDir}/${projectName}-${appVersion}.dmg"
+    val toFile = "${outputFile}"
+    func.copyFile(fromFile, toFile)
+    File(fromFile).delete()
+    func.verifyFileExists(outputFile);
   }
 }
 
@@ -727,9 +730,9 @@ tasks.register("genBuildInfo") {
     var buildId = "(Not built from Git repo)";
     if (File("${projectDir}/.git").exists()) {
       var errMsg = "Failed getting branch name."
-      branchName = Func.runCommand(listOf("git", "-C", projectDir, "rev-parse", "--abbrev-ref", "HEAD"), errMsg)
+      branchName = func.runCommand(listOf("git", "-C", projectDir, "rev-parse", "--abbrev-ref", "HEAD"), errMsg)
       errMsg = "Failed getting last commit hash."
-      branchLastCommitHash = Func.runCommand(listOf("git", "-C", projectDir, "rev-parse", "--short=8", "HEAD"), errMsg)
+      branchLastCommitHash = func.runCommand(listOf("git", "-C", projectDir, "rev-parse", "--short=8", "HEAD"), errMsg)
       buildId = "${branchName}/${branchLastCommitHash}"
     }
 
@@ -789,7 +792,7 @@ tasks.register("genBuildInfo") {
 tasks.register("genFiles") {
   group = "build"
   description = "Generates all generated files."
-  // dependsOn("genBuildInfo")
+  //dependsOn("genBuildInfo")
 }
 
 /**
@@ -876,7 +879,7 @@ tasks {
   // Checkstyles related tasks: "checkstylMain" and "checkstyleTest"
   checkstyle {
     // Checkstyle version to use
-    toolVersion = "11.0.0"
+    toolVersion = "12.1.2"
 
     // let's use google_checks.xml config provided with Checkstyle.
     // https://stackoverflow.com/a/67513272/1235698
