@@ -14,5 +14,6 @@ class Main {
     } catch (IOException ex) {
       System.out.print("Io exception: " + ex);
     }
+      System.out.println("Finished");
   }
 }
