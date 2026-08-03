@@ -17,7 +17,7 @@ import java.util.Date
 
 plugins {
   checkstyle
-  id("com.github.ben-manes.versions") version "0.58.0"
+  id("io.github.ben-manes.versions") version "0.59.0"
   java
   application
   id("com.gradleup.shadow") version "9.6.1"
@@ -879,7 +879,7 @@ tasks {
   // Checkstyles related tasks: "checkstylMain" and "checkstyleTest"
   checkstyle {
     // Checkstyle version to use
-    toolVersion = "13.4.0"
+    toolVersion = "13.9.0"
 
     // let's use google_checks.xml config provided with Checkstyle.
     // https://stackoverflow.com/a/67513272/1235698
