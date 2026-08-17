@@ -17,7 +17,7 @@ import java.util.Date
 
 plugins {
   checkstyle
-  id("io.github.ben-manes.versions") version "0.60.0"
+  id("io.github.ben-manes.versions") version "0.61.0"
   java
   application
   id("com.gradleup.shadow") version "9.6.1"
