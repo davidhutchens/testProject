@@ -84,7 +84,7 @@ jobs:
         # Version should match the version in build.gradle.kts.
         # CHECKSTYLE_VERSION="13.9.0"
         echo "Shell = $0"
-        CHECKSTYLE_VERSION=$(grep build.gradle.kts toolVersion | sed 's/.*= "//' | sed 's/"//')
+        CHECKSTYLE_VERSION=$(grep toolVersion build.gradle.kts | sed 's/.*= "//' | sed 's/"//')
         echo "Checkstyle version ${CHECKSTYLE_VERSION}"
         JAR="checkstyle-${CHECKSTYLE_VERSION}-all.jar"
         URL="https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${CHECKSTYLE_VERSION}/${JAR}"
