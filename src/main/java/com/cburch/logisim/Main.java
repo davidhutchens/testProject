@@ -9,7 +9,7 @@ class Main {
     try (FileOutputStream fos = new FileOutputStream("/Users/hutchens/testOutput.txt")) {
       String text = "It seems to still work!\n";
       byte[] myBytes = text.getBytes();
-      fos.write(myBytes);
+        fos.write(myBytes);
       fos.close();
     } catch (IOException ex) {
       System.out.print("Io exception: " + ex);
